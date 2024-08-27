@@ -5,6 +5,7 @@ import confetti from "canvas-confetti";
 import WinnerModal from "./components/WinnerModal";
 import { checkWinner, checkEndGame } from "./logic/board";
 import { saveGameToStorage, resetGameStorage } from "./storage/index";
+import winSound from "./sounds/winner.mp3";
 
 function App() {
   //State Board para almacenar X o O
@@ -24,6 +25,12 @@ function App() {
   //State Winner para mostrar el ganador
   const [winner, setWinner] = useState(null); //True: ganador, null: no hay ganador
 
+  //!FUNCION PARA REPRODUCIR SONIDOS
+  const playSound = (sound) => {
+    const audio = new Audio(sound);
+    audio.play(); //Usamos la API de javascript para reproducir el audio
+  };
+
   //!FUNCION PARA ACTUALIZAR EL TABLERO
   const updateBoard = (index) => {
     //Validamos si el tablero ya tiene un valor y no se puede cambiar
@@ -42,6 +49,8 @@ function App() {
     //Revisamos si hay un ganador
     const newWinner = checkWinner(newBoard); //Enviamos el nuevo tablero
     if (newWinner) {
+      // Reproduce el sonido de ganador
+      playSound(winSound);
       //Activamos la animacion confetti
       confetti({
         particleCount: 150, //Cantidad de particulas
